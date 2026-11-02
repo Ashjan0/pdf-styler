@@ -113,6 +113,9 @@ canvas#preview{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 8p
         <p class="hint">Scans the slides for text that repeats on every page, then covers it. Use it on your own slides.</p>
         <button class="mini on" id="detect" style="width:100%;padding:10px">Auto-detect watermark</button>
         <div class="status" id="detInfo"></div>
+        <label class="check" style="margin-top:12px"><input type="checkbox" id="faint"> Remove faint watermark (by colour)</label>
+        <input type="range" id="faintT" min="6" max="90" value="40" style="width:100%" aria-label="Strength">
+        <div class="note">For light, tilted or see-through watermarks. Higher removes more; if slide text starts looking thin, lower it.</div>
         <hr>
         <h2>Manual</h2>
         <div class="btns">
@@ -241,7 +244,7 @@ function opts(){
     start:parseInt($('start').value,10)||0, skipFirst:$('skipFirst').checked,
     txtOn:$('txtOn').checked && $('txt').value.trim(), txt:$('txt').value.trim(), txtPos:$('txtPos').value,
     txtSize:+$('txtSize').value||14, txtColor:$('txtColor').value, txtBold:$('txtBold').checked,
-    per:+$('per').value, orient:$('orient').value, gap:+$('gap').value||0, sheet:$('sheet').value, border:$('border').checked
+    faint:$('faint').checked, faintT:+$('faintT').value, per:+$('per').value, orient:$('orient').value, gap:+$('gap').value||0, sheet:$('sheet').value, border:$('border').checked
   };
 }
 
@@ -265,6 +268,15 @@ function cover(ctx,W,H,R){
   ctx.putImageData(img,0,0);
 }
 
+// Snap pixels that are only slightly different from the background (faint watermark) back to the background.
+function faintOut(ctx,W,H,bg0,T){
+  const img=ctx.getImageData(0,0,W,H), d=img.data, T2=T*T;
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i]-bg0[0], g=d[i+1]-bg0[1], b=d[i+2]-bg0[2], q=r*r+g*g+b*b;
+    if(q>0&&q<T2){ d[i]=bg0[0]; d[i+1]=bg0[1]; d[i+2]=bg0[2]; }
+  }
+  ctx.putImageData(img,0,0);
+}
 // One pass: move the background to the new colour and (optionally) map text pixels to a new text colour.
 function restyle(ctx,W,H,bg0,newBg,textNew){
   const img=ctx.getImageData(0,0,W,H), d=img.data;
@@ -304,6 +316,7 @@ function style(canvas,idx,total,wpt,withGuides){
   const o=opts(), ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height, sc=W/wpt;
   const bg0=Array.from(ctx.getImageData(0,0,1,1).data).slice(0,3);
   regions.forEach(r => cover(ctx,W,H,r));
+  if(o.faint) faintOut(ctx,W,H,bg0,o.faintT);
   if(o.changeBg||o.textOn) restyle(ctx,W,H,bg0,o.changeBg?o.bg:bg0,o.textOn?o.textColor:null);
   if(o.txtOn) label(ctx,W,H,o.txt,o.txtPos,o.txtSize*sc,o.txtColor,o.font,o.txtBold);
   if(o.numOn && !(o.skipFirst&&idx===1)){
@@ -404,7 +417,7 @@ async function detectWm(){
     });
   }
   const hits=Object.values(map).filter(m=>m.c>=Math.max(2,Math.ceil(ids.length*.7)));
-  if(!hits.length){ $('detInfo').textContent='No repeated text found. The watermark is probably an image baked into the slide. Use the manual tools, or send the PDF for a closer look.'; return; }
+  if(!hits.length){ $('faint').checked=true; $('detInfo').textContent='No repeated text found, so this watermark is not real text (it is an image or drawn shape). Switched on colour-based removal below. Adjust the strength until it disappears.'; refreshPreview(); return; }
   let tilted=false;
   hits.forEach(m=>{
     const len=Math.hypot(m.a,m.b)||1, ux=m.a/len, uy=m.b/len, pts=[[0,0],[m.w,0],[0,m.h],[m.w,m.h]].map(([u,v])=>[m.e+u*ux-v*uy,m.f+u*uy+v*ux]);
