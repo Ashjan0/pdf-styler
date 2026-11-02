@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ashraf PDF Styler</title>
+<meta name="description" content="Change slide background and add page numbers to any PDF, right in your browser. Built by Ashraf.">
+<style>
+  :root{
+    --bg:#0b0f1a; --panel:#131a2b; --line:#232d45; --text:#e8ecf6; --muted:#8e9ab5;
+    --accent:#ff9f1c; --accent2:#2dd4ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  header{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .brand{font-weight:800;font-size:1.25rem;letter-spacing:.3px}
+  .brand span{color:var(--accent)}
+  header a{color:var(--muted);text-decoration:none;font-size:.9rem}
+  header a:hover{color:var(--text)}
+  main{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  h1{font-size:1.9rem;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 26px}
+  .grid{display:grid;grid-template-columns:380px 1fr;gap:22px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card h2{font-size:.8rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent2);margin:0 0 12px}
+  .card + .card{margin-top:16px}
+  label{display:block;font-size:.88rem;color:var(--muted);margin:10px 0 4px}
+  input[type=number],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#0e1424;color:var(--text);font-size:.95rem}
+  input[type=color]{width:46px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;padding:2px;cursor:pointer}
+  input[type=range]{width:100%}
+  .row{display:flex;gap:10px;align-items:center}
+  .check{display:flex;align-items:center;gap:8px;color:var(--text);font-size:.95rem;margin:6px 0;cursor:pointer}
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:26px 14px;text-align:center;cursor:pointer;color:var(--muted);transition:.15s}
+  .drop:hover,.drop.on{border-color:var(--accent);color:var(--text)}
+  .drop b{color:var(--text)}
+  .swatches{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+  .sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
+  .sw:hover{border-color:var(--text)}
+  button.go{width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;font-size:1rem;font-weight:700;background:var(--accent);color:#1a1200;cursor:pointer}
+  button.go:disabled{opacity:.45;cursor:not-allowed}
+  .bar{height:8px;background:#0e1424;border-radius:99px;overflow:hidden;margin-top:12px;display:none}
+  .bar i{display:block;height:100%;width:0;background:var(--accent2);transition:width .15s}
+  .status{font-size:.85rem;color:var(--muted);margin-top:8px;min-height:1.2em}
+  .preview{background:#05080f;border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:320px;overflow:hidden}
+  canvas#preview{max-width:100%;height:auto;display:block}
+  .empty{color:var(--muted);padding:40px;text-align:center}
+  .note{font-size:.8rem;color:var(--muted);margin-top:10px}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
+  footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Ashraf<span>.</span>dev</div>
+  <a href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
+</header>
+
+<main>
+  <h1>PDF Styler</h1>
+  <p class="sub">Change the slide background and add page numbers to any PDF — 100% in your browser. Your file never leaves your device.</p>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>1 · Upload PDF</h2>
+        <div class="drop" id="drop"><b>Click to choose</b> or drag &amp; drop a PDF here</div>
+        <input type="file" id="file" accept="application/pdf" hidden>
+        <div class="status" id="fileInfo"></div>
+      </div>
+
+      <div class="card">
+        <h2>2 · Background</h2>
+        <label class="check"><input type="checkbox" id="changeBg" checked> Change background colour</label>
+        <div class="swatches" id="swatches"></div>
+        <div class="row"><input type="color" id="bgColor" value="#2a1b4d"><span class="note" style="margin:0">Custom colour</span></div>
+        <div class="note">Tip: slides have white text, so dark / deep colours look best.</div>
+      </div>
+
+      <div class="card">
+        <h2>3 · Page numbers</h2>
+        <label class="check"><input type="checkbox" id="numOn" checked> Show slide numbers</label>
+        <div class="row">
+          <div style="flex:1"><label>Position</label>
+            <select id="pos">
+              <option value="br">Bottom right</option>
+              <option value="bc">Bottom center</option>
+              <option value="bl">Bottom left</option>
+              <option value="tr">Top right</option>
+              <option value="tc">Top center</option>
+              <option value="tl">Top left</option>
+            </select></div>
+          <div style="flex:1"><label>Format</label>
+            <select id="fmt">
+              <option value="n">3</option>
+              <option value="nt">3 / 23</option>
+              <option value="p">Page 3</option>
+              <option value="s">Slide 3</option>
+            </select></div>
+        </div>
+        <div class="row">
+          <div style="flex:1"><label>Start from</label><input type="number" id="start" value="1" min="0"></div>
+          <div><label>Colour</label><input type="color" id="numColor" value="#ff9f1c"></div>
+        </div>
+        <label>Size</label><input type="range" id="size" min="2" max="7" step="0.2" value="3.4">
+        <label class="check"><input type="checkbox" id="skipFirst"> Hide number on first slide</label>
+      </div>
+
+      <div class="card">
+        <h2>4 · Export</h2>
+        <label>Quality</label>
+        <select id="quality">
+          <option value="1.5">Standard (smaller file)</option>
+          <option value="2" selected>High</option>
+          <option value="3">Max (big file)</option>
+        </select>
+        <button class="go" id="go" disabled>Download styled PDF</button>
+        <div class="bar" id="bar"><i id="barFill"></i></div>
+        <div class="status" id="status"></div>
+        <div class="note">Output pages are images, so text can't be selected in the new PDF.</div>
+      </div>
+    </div>
+
+    <div class="card" style="align-self:start">
+      <h2>Live preview</h2>
+      <div class="row" style="margin-bottom:10px">
+        <label style="margin:0">Slide</label>
+        <input type="number" id="prevPage" value="1" min="1" style="width:90px" disabled>
+        <span class="note" id="pageCount" style="margin:0"></span>
+      </div>
+      <div class="preview">
+        <div class="empty" id="empty">Upload a PDF to see the preview here.</div>
+        <canvas id="preview" style="display:none"></canvas>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>Built by <a href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener">Ashraf</a> · runs fully client-side</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const $ = id => document.getElementById(id);
+let pdfDoc = null, fileName = 'slides', previewRaw = null, previewIdx = 1, busy = false;
+
+const PRESETS = [
+  ['#0b0f1a','Midnight'],['#000000','Black'],['#1f2430','Charcoal'],['#2a1b4d','Deep purple'],
+  ['#0f3d2e','Forest'],['#4a1220','Maroon'],['#0a2d42','Original navy']
+];
+PRESETS.forEach(([c,t]) => {
+  const d = document.createElement('div');
+  d.className = 'sw'; d.style.background = c; d.title = t;
+  d.onclick = () => { $('bgColor').value = c; $('changeBg').checked = true; refreshPreview(); };
+  $('swatches').appendChild(d);
+});
+
+const hex2rgb = h => [1,3,5].map(i => parseInt(h.slice(i,i+2),16));
+
+function opts(){
+  return {
+    changeBg: $('changeBg').checked, bg: hex2rgb($('bgColor').value),
+    numOn: $('numOn').checked, pos: $('pos').value, fmt: $('fmt').value,
+    size: +$('size').value, numColor: $('numColor').value,
+    start: parseInt($('start').value,10) || 0, skipFirst: $('skipFirst').checked
+  };
+}
+
+// Replace the slide background colour (sampled from the top-left pixel) while keeping text, images and tables.
+function recolor(ctx, w, h, newBg){
+  const img = ctx.getImageData(0,0,w,h), d = img.data;
+  const sr = d[0], sg = d[1], sb = d[2];
+  const dr = newBg[0]-sr, dg = newBg[1]-sg, db = newBg[2]-sb;
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i]-sr, g=d[i+1]-sg, b=d[i+2]-sb;
+    const dist = Math.sqrt(r*r+g*g+b*b);
+    const wgt = Math.max(0, 1 - dist/260);
+    if(wgt === 0) continue;
+    d[i]   = Math.min(255, Math.max(0, d[i]   + dr*wgt));
+    d[i+1] = Math.min(255, Math.max(0, d[i+1] + dg*wgt));
+    d[i+2] = Math.min(255, Math.max(0, d[i+2] + db*wgt));
+  }
+  ctx.putImageData(img,0,0);
+}
+
+function drawNumber(ctx, w, h, idx, total, o){
+  if(o.skipFirst && idx === 1) return;
+  const n = idx + o.start - 1, t = total + o.start - 1;
+  const label = { n:`${n}`, nt:`${n} / ${t}`, p:`Page ${n}`, s:`Slide ${n}` }[o.fmt];
+  const fs = h * o.size / 100, m = w * 0.025;
+  ctx.font = `700 ${fs}px system-ui, -apple-system, "Segoe UI", Arial, sans-serif`;
+  ctx.fillStyle = o.numColor;
+  ctx.textAlign = o.pos[1]==='l' ? 'left' : o.pos[1]==='c' ? 'center' : 'right';
+  ctx.textBaseline = o.pos[0]==='b' ? 'bottom' : 'top';
+  const x = o.pos[1]==='l' ? m : o.pos[1]==='c' ? w/2 : w-m;
+  const y = o.pos[0]==='b' ? h-m : m;
+  ctx.fillText(label, x, y);
+}
+
+function style(canvas, idx, total){
+  const o = opts(), ctx = canvas.getContext('2d');
+  if(o.changeBg) recolor(ctx, canvas.width, canvas.height, o.bg);
+  if(o.numOn) drawNumber(ctx, canvas.width, canvas.height, idx, total, o);
+}
+
+async function renderRaw(n, scale){
+  const page = await pdfDoc.getPage(n);
+  const vp = page.getViewport({scale});
+  const c = document.createElement('canvas');
+  c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+  await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise;
+  const pt = page.getViewport({scale:1});
+  return {c, wpt: pt.width, hpt: pt.height};
+}
+
+async function loadPreview(){
+  if(!pdfDoc) return;
+  const n = Math.min(Math.max(1, parseInt($('prevPage').value,10)||1), pdfDoc.numPages);
+  previewIdx = n;
+  previewRaw = (await renderRaw(n, 1)).c;
+  refreshPreview();
+}
+
+function refreshPreview(){
+  if(!previewRaw) return;
+  const p = $('preview');
+  p.width = previewRaw.width; p.height = previewRaw.height;
+  p.getContext('2d').drawImage(previewRaw,0,0);
+  style(p, previewIdx, pdfDoc.numPages);
+  p.style.display = 'block'; $('empty').style.display = 'none';
+}
+
+async function handleFile(f){
+  if(!f || f.type !== 'application/pdf'){ $('fileInfo').textContent = 'Please choose a PDF file.'; return; }
+  $('fileInfo').textContent = 'Reading…';
+  try{
+    pdfDoc = await pdfjsLib.getDocument({data: await f.arrayBuffer()}).promise;
+  }catch(e){ $('fileInfo').textContent = 'Could not open this PDF.'; return; }
+  fileName = f.name.replace(/\.pdf$/i,'');
+  $('fileInfo').textContent = `${f.name} · ${pdfDoc.numPages} pages`;
+  $('pageCount').textContent = `of ${pdfDoc.numPages}`;
+  $('prevPage').disabled = false; $('prevPage').max = pdfDoc.numPages; $('prevPage').value = 1;
+  $('go').disabled = false;
+  await loadPreview();
+}
+
+async function exportPdf(){
+  if(!pdfDoc || busy) return;
+  busy = true; $('go').disabled = true;
+  const total = pdfDoc.numPages, scale = +$('quality').value;
+  $('bar').style.display = 'block'; $('barFill').style.width = '0';
+  let doc = null;
+  try{
+    for(let i=1;i<=total;i++){
+      $('status').textContent = `Processing slide ${i} of ${total}…`;
+      const {c, wpt, hpt} = await renderRaw(i, scale);
+      style(c, i, total);
+      const orient = wpt >= hpt ? 'l' : 'p';
+      if(!doc) doc = new jspdf.jsPDF({orientation: orient, unit:'pt', format:[wpt,hpt], compress:true});
+      else doc.addPage([wpt,hpt], orient);
+      doc.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, wpt, hpt);
+      c.width = 0;
+      $('barFill').style.width = (i/total*100) + '%';
+      await new Promise(r => setTimeout(r, 0));
+    }
+    doc.save(`${fileName}-styled.pdf`);
+    $('status').textContent = 'Done! Your download should start now.';
+  }catch(e){
+    console.error(e);
+    $('status').textContent = 'Something went wrong. Try "Standard" quality for large files.';
+  }
+  busy = false; $('go').disabled = false;
+}
+
+// events
+$('drop').onclick = () => $('file').click();
+$('file').onchange = e => handleFile(e.target.files[0]);
+['dragenter','dragover'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('on'); }));
+['dragleave','drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('on'); }));
+$('drop').addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
+['changeBg','bgColor','numOn','pos','fmt','size','numColor','start','skipFirst'].forEach(id => {
+  $(id).addEventListener('input', refreshPreview);
+});
+$('prevPage').addEventListener('change', loadPreview);
+$('go').onclick = exportPdf;
+</script>
+</body>
+</html>
