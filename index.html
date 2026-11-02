@@ -10,49 +10,64 @@
 --line:color-mix(in srgb,var(--text) 16%,var(--panel));--muted:color-mix(in srgb,var(--text) 58%,var(--bg));
 --field:color-mix(in srgb,var(--bg) 60%,var(--panel));--accent2:color-mix(in srgb,var(--accent) 50%,var(--text))}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-header{padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
-.brand{font-weight:800;font-size:1.2rem}.brand span{color:var(--accent)}
-.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
-.tools a{color:var(--muted);text-decoration:none}.tools a:hover{color:var(--text)}
-main{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
-h1{font-size:1.8rem;margin:0 0 6px}.sub{color:var(--muted);margin:0 0 24px}
-.grid{display:grid;grid-template-columns:400px 1fr;gap:22px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
-.card h2{font-size:1rem;margin:0 0 10px;color:var(--accent2)}
-.card+.card{margin-top:16px}
-label{display:block;font-size:.86rem;color:var(--muted);margin:10px 0 4px}
-input[type=number],input[type=text],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--text);font-size:.93rem}
+html,body{height:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;display:flex;flex-direction:column;overflow:hidden}
+header{height:56px;flex:none;padding:0 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);background:var(--panel)}
+.brand{font-weight:800;font-size:1.1rem}.brand span{color:var(--accent)}
+.file{font-size:.85rem;color:var(--muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp{flex:1}
+.tools{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
+.tools a{color:var(--muted);text-decoration:none}
+button{font:inherit;cursor:pointer}
+button.go{padding:9px 18px;border:0;border-radius:9px;font-weight:700;background:var(--accent);color:var(--on)}
+button.go:disabled{opacity:.4;cursor:not-allowed}
+.ws{flex:1;min-height:0;display:grid;grid-template-columns:340px 1fr}
+.side{display:flex;flex-direction:column;min-height:0;background:var(--panel);border-right:1px solid var(--line)}
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:11px 2px;border:0;background:none;color:var(--muted);font-size:.8rem;border-bottom:2px solid transparent}
+.tab.on{color:var(--accent);border-color:var(--accent)}
+.panes{flex:1;overflow:auto;padding:16px}
+.pane{display:none}.pane.on{display:block}
+.pane h2{font-size:.95rem;margin:0 0 4px}.hint{font-size:.8rem;color:var(--muted);margin:0 0 8px}
+label{display:block;font-size:.84rem;color:var(--muted);margin:10px 0 4px}
+input[type=number],input[type=text],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--text);font-size:.92rem}
 input[type=color]{width:44px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;padding:2px;cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .row{display:flex;gap:10px;align-items:flex-end}.row>div{flex:1}.row>.fit{flex:none}
-.check{display:flex;align-items:center;gap:8px;color:var(--text);font-size:.93rem;margin:6px 0;cursor:pointer}
-.drop{border:2px dashed var(--line);border-radius:12px;padding:24px 14px;text-align:center;cursor:pointer;color:var(--muted)}
+.check{display:flex;align-items:center;gap:8px;color:var(--text);font-size:.92rem;margin:8px 0;cursor:pointer}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:34px 16px;text-align:center;cursor:pointer;color:var(--muted)}
 .drop:hover,.drop.on{border-color:var(--accent);color:var(--text)}.drop b{color:var(--text)}
 .swatches{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
 .sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}.sw:hover{border-color:var(--text)}
-button{font:inherit;cursor:pointer}
-.mini{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--text);font-size:.83rem}
+.mini{padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--text);font-size:.83rem}
 .mini:hover,.mini.on{border-color:var(--accent);color:var(--accent)}
-.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-button.go{width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;font-weight:700;background:var(--accent);color:var(--on)}
-button.go:disabled{opacity:.45;cursor:not-allowed}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 .bar{height:8px;background:var(--field);border-radius:99px;overflow:hidden;margin-top:12px;display:none}
 .bar i{display:block;height:100%;width:0;background:var(--accent2)}
-.status{font-size:.85rem;color:var(--muted);margin-top:8px;min-height:1.2em}
+.status{font-size:.84rem;color:var(--muted);margin-top:8px;min-height:1.2em}
 .note{font-size:.8rem;color:var(--muted);margin-top:8px}
-.preview{background:var(--field);border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:320px;overflow:hidden}
-canvas#preview{max-width:100%;height:auto;display:block}.empty{color:var(--muted);padding:40px;text-align:center}
-footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.bartop{flex:none;display:flex;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid var(--line)}
+.bartop input{width:70px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:none;color:var(--muted);padding:6px 12px;font-size:.83rem}.seg button.on{background:var(--accent);color:var(--on)}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--field)}
+canvas#preview{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 8px 30px #0006;border-radius:4px}
+.empty{color:var(--muted);text-align:center}
+.strip{flex:none;height:104px;display:flex;gap:10px;overflow-x:auto;padding:10px 16px;border-top:1px solid var(--line);background:var(--panel)}
+.strip canvas{height:100%;width:auto;border:2px solid var(--line);border-radius:5px;cursor:pointer;flex:none}
+.strip canvas.on{border-color:var(--accent)}
+@media(max-width:860px){body{overflow:auto}.ws{display:block}.side{border-right:0}.stage{height:60vh}.file{display:none}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">PDF<span>.</span>Styler</div>
+  <div class="file" id="fileInfo"></div>
+  <div class="sp"></div>
   <div class="tools">
-    <label for="theme" style="margin:0">Theme</label>
-    <select id="theme" style="width:auto"></select>
+    <select id="theme" style="width:auto" aria-label="Theme"></select>
     <span id="custom" hidden>
       <input type="color" id="tBg" title="Page background" aria-label="Page background">
       <input type="color" id="tPanel" title="Panels" aria-label="Panel colour">
@@ -61,44 +76,58 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
     </span>
     <a id="gh" href="#" target="_blank" rel="noopener" hidden>GitHub ↗</a>
   </div>
+  <button class="go" id="go" disabled>Download PDF</button>
 </header>
 
-<main>
-  <h1>PDF Styler</h1>
-  <p class="sub">Recolour slides, add page numbers and text, remove a watermark, and print several slides on one A4 page. Everything runs in your browser; your file is never uploaded.</p>
-  <div class="grid">
-    <div>
-      <div class="card">
-        <h2>1 · Upload PDF</h2>
-        <div class="drop" id="drop" tabindex="0"><b>Click to choose</b> or drag &amp; drop a PDF here</div>
+<div class="ws">
+  <aside class="side">
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-tab="file">File</button><button class="tab" data-tab="col">Colours</button><button class="tab" data-tab="wm">Watermark</button><button class="tab" data-tab="txt">Text</button><button class="tab" data-tab="lay">Layout</button>
+    </div>
+    <div class="panes">
+      <section class="pane on" id="p-file">
+        <div class="drop" id="drop" tabindex="0"><b>Choose a PDF</b><br>or drag &amp; drop it here</div>
         <input type="file" id="file" accept="application/pdf" hidden>
-        <div class="status" id="fileInfo"></div>
-      </div>
+        <div class="note">Your file never leaves your browser.</div>
+        <hr>
+        <h2>Export quality</h2>
+        <select id="quality"><option value="1.5">Standard (smaller file)</option><option value="2" selected>High</option><option value="3">Max (big file)</option></select>
+        <div class="bar" id="bar"><i id="barFill"></i></div>
+        <div class="status" id="status"></div>
+        <div class="note">Output pages are images, so text can't be selected in the new PDF.</div>
+      </section>
 
-      <div class="card">
-        <h2>2 · Colours</h2>
+      <section class="pane" id="p-col">
+        <h2>Background</h2>
         <label class="check"><input type="checkbox" id="changeBg" checked> Change background colour</label>
         <div class="swatches" id="swatches"></div>
-        <div class="row"><div class="fit"><input type="color" id="bgColor" value="#2a1b4d" aria-label="Background colour"></div><div class="note" style="margin:0">Custom background</div></div>
+        <div class="row"><div class="fit"><input type="color" id="bgColor" value="#2a1b4d" aria-label="Background colour"></div><div class="note" style="margin:0">Custom colour</div></div>
+        <hr>
+        <h2>Slide text</h2>
         <label class="check"><input type="checkbox" id="textOn"> Change slide text colour</label>
-        <div class="row"><div class="fit"><input type="color" id="textColor" value="#ffffff" aria-label="Slide text colour"></div><div class="note" style="margin:0">Use dark text on a light background. Photos may shift slightly.</div></div>
-      </div>
+        <div class="row"><div class="fit"><input type="color" id="textColor" value="#ffffff" aria-label="Slide text colour"></div><div class="note" style="margin:0">Use dark text on a light background.</div></div>
+      </section>
 
-      <div class="card">
-        <h2>3 · Remove watermark</h2>
-        <div class="note" style="margin:0 0 6px">Covers an area by blending the surrounding background into it. Works best on plain backgrounds. Use it on your own slides.</div>
+      <section class="pane" id="p-wm">
+        <h2>Remove watermark</h2>
+        <p class="hint">Scans the slides for text that repeats on every page, then covers it. Use it on your own slides.</p>
+        <button class="mini on" id="detect" style="width:100%;padding:10px">Auto-detect watermark</button>
+        <div class="status" id="detInfo"></div>
+        <hr>
+        <h2>Manual</h2>
         <div class="btns">
           <button class="mini" data-r="br">Bottom right</button><button class="mini" data-r="bl">Bottom left</button>
           <button class="mini" data-r="tr">Top right</button><button class="mini" data-r="tl">Top left</button>
-          <button class="mini" id="draw">Draw on preview</button><button class="mini" id="undo">Undo</button><button class="mini" id="clear">Clear all</button>
         </div>
+        <div class="btns"><button class="mini" id="draw">Draw on preview</button><button class="mini" id="undo">Undo</button><button class="mini" id="clear">Clear all</button></div>
         <div class="status" id="regInfo">No area selected.</div>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2>4 · Text &amp; page numbers</h2>
+      <section class="pane" id="p-txt">
         <label>Font</label>
         <select id="font"><option>Arial</option><option>Segoe UI</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option><option>Courier New</option><option>Trebuchet MS</option></select>
+        <hr>
+        <h2>Slide numbers</h2>
         <label class="check"><input type="checkbox" id="numOn" checked> Show slide numbers</label>
         <div class="row">
           <div><label>Position</label><select id="pos"><option value="br">Bottom right</option><option value="bc">Bottom center</option><option value="bl">Bottom left</option><option value="tr">Top right</option><option value="tc">Top center</option><option value="tl">Top left</option></select></div>
@@ -110,7 +139,9 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
           <div class="fit"><label>Colour</label><input type="color" id="numColor" value="#ff9f1c"></div>
         </div>
         <label class="check"><input type="checkbox" id="skipFirst"> Hide number on first slide</label>
-        <label class="check" style="margin-top:14px"><input type="checkbox" id="txtOn"> Add text on every slide (name, roll no., college)</label>
+        <hr>
+        <h2>Custom text</h2>
+        <label class="check"><input type="checkbox" id="txtOn"> Add on every slide (name, roll no., college)</label>
         <input type="text" id="txt" placeholder="e.g. Ashraf · BCA 3rd year" maxlength="80">
         <div class="row">
           <div><label>Position</label><select id="txtPos"><option value="bl">Bottom left</option><option value="bc">Bottom center</option><option value="br">Bottom right</option><option value="tl">Top left</option><option value="tc">Top center</option><option value="tr">Top right</option></select></div>
@@ -118,10 +149,9 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
           <div class="fit"><label>Colour</label><input type="color" id="txtColor" value="#ffffff"></div>
         </div>
         <label class="check"><input type="checkbox" id="txtBold"> Bold</label>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2>5 · Page layout</h2>
+      <section class="pane" id="p-lay">
         <label>Slides per page</label>
         <select id="per">
           <option value="0">Original size (1 slide per page)</option>
@@ -136,34 +166,26 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
         <select id="sheet"><option value="w">White (good for printing)</option><option value="bg">Same as slide background</option></select>
         <label class="check"><input type="checkbox" id="border" checked> Thin border around each slide</label>
         <div class="status" id="layoutInfo"></div>
-      </div>
-
-      <div class="card">
-        <h2>6 · Export</h2>
-        <label>Quality</label>
-        <select id="quality"><option value="1.5">Standard (smaller file)</option><option value="2" selected>High</option><option value="3">Max (big file)</option></select>
-        <button class="go" id="go" disabled>Download styled PDF</button>
-        <div class="bar" id="bar"><i id="barFill"></i></div>
-        <div class="status" id="status"></div>
-        <div class="note">Output pages are images, so text can't be selected in the new PDF.</div>
-      </div>
+      </section>
     </div>
+  </aside>
 
-    <div class="card" style="align-self:start;position:sticky;top:12px">
-      <h2>Live preview</h2>
-      <div class="row" style="margin-bottom:10px;align-items:center">
-        <label style="margin:0">Slide</label>
-        <input type="number" id="prevPage" value="1" min="1" style="width:90px" disabled>
-        <span class="note" id="pageCount" style="margin:0"></span>
-      </div>
-      <div class="preview">
-        <div class="empty" id="empty">Upload a PDF to see the preview here.</div>
-        <canvas id="preview" style="display:none"></canvas>
-      </div>
+  <section class="main">
+    <div class="bartop">
+      <button class="mini" id="prev" aria-label="Previous slide">‹</button>
+      <input type="number" id="prevPage" value="1" min="1" disabled aria-label="Slide number">
+      <span class="note" id="pageCount" style="margin:0"></span>
+      <button class="mini" id="next" aria-label="Next slide">›</button>
+      <div class="sp"></div>
+      <div class="seg"><button class="on" id="vSlide">Slide</button><button id="vSheet">A4 sheet</button></div>
     </div>
-  </div>
-</main>
-<footer>Built by Ashraf · runs fully client-side</footer>
+    <div class="stage">
+      <div class="empty" id="empty">Open the <b>File</b> tab and choose a PDF to start.</div>
+      <canvas id="preview" style="display:none"></canvas>
+    </div>
+    <div class="strip" id="strip" hidden></div>
+  </section>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -334,22 +356,76 @@ function refreshPreview(){
   updateInfo();
   $('regInfo').textContent = regions.length ? `${regions.length} area${regions.length>1?'s':''} will be covered.` : 'No area selected.';
   if(!previewRaw) return;
-  const p=$('preview'); p.width=previewRaw.width; p.height=previewRaw.height;
-  p.getContext('2d').drawImage(previewRaw,0,0);
-  style(p,previewIdx,pdfDoc.numPages,previewPt[0],true);
-  p.style.display='block'; $('empty').style.display='none';
+  const p=$('preview'); const sheet=view==='sheet'&&layoutFor(previewPt[0],previewPt[1],opts());
+  if(sheet) drawSheet(p,sheet); else {
+    p.width=previewRaw.width; p.height=previewRaw.height;
+    p.getContext('2d').drawImage(previewRaw,0,0);
+    style(p,previewIdx,pdfDoc.numPages,previewPt[0],true);
+  }
+  p.style.display='block'; $('empty').style.display='none'; clearTimeout(tt); tt=setTimeout(paintThumbs,120);
+}
+let view='slide', tt=null, thumbs=[];
+async function buildThumbs(){
+  const doc=pdfDoc; thumbs=[]; const st=$('strip'); st.innerHTML=''; st.hidden=false;
+  for(let i=1;i<=doc.numPages&&doc===pdfDoc;i++){
+    const pg=await doc.getPage(i), pt=pg.getViewport({scale:1}), vp=pg.getViewport({scale:360/pt.width});
+    const raw=document.createElement('canvas'); raw.width=Math.round(vp.width); raw.height=Math.round(vp.height);
+    await pg.render({canvasContext:raw.getContext('2d'),viewport:vp}).promise;
+    const c=document.createElement('canvas'); c.width=raw.width; c.height=raw.height; c.onclick=()=>{$('prevPage').value=i;loadPreview();};
+    thumbs[i]={raw,c,wpt:pt.width}; st.appendChild(c); paintThumb(i);
+    if(i===1) refreshPreview();
+  }
+}
+function paintThumb(i){
+  const t=thumbs[i]; if(!t) return; const x=t.c.getContext('2d'); x.drawImage(t.raw,0,0);
+  style(t.c,i,pdfDoc.numPages,t.wpt); t.c.classList.toggle('on',i===previewIdx);
+}
+function paintThumbs(){ if(pdfDoc) for(let i=1;i<thumbs.length;i++) paintThumb(i); const t=thumbs[previewIdx]; if(t) t.c.scrollIntoView({block:'nearest',inline:'center'}); }
+function drawSheet(p,L){
+  const o=opts(), k=1000/L.pw; p.width=Math.round(L.pw*k); p.height=Math.round(L.ph*k);
+  const x=p.getContext('2d'); x.fillStyle=(o.sheet==='bg'&&o.changeBg)?`rgb(${o.bg})`:'#fff'; x.fillRect(0,0,p.width,p.height);
+  const first=Math.floor((previewIdx-1)/o.per)*o.per;
+  for(let j=0;j<o.per&&first+j<pdfDoc.numPages;j++){
+    const t=thumbs[first+j+1]; if(!t) continue;
+    const f=Math.min(L.cw*k/t.c.width,L.ch*k/t.c.height), w=t.c.width*f, h=t.c.height*f;
+    const px=(MARGIN+(j%L.cols)*(L.cw+o.gap))*k+(L.cw*k-w)/2, py=(MARGIN+Math.floor(j/L.cols)*(L.ch+o.gap))*k+(L.ch*k-h)/2;
+    x.drawImage(t.c,px,py,w,h); if(o.border){x.strokeStyle='#9aa3b5';x.strokeRect(px,py,w,h);}
+  }
+}
+async function detectWm(){
+  if(!pdfDoc) return; $('detInfo').textContent='Scanning…';
+  const n=pdfDoc.numPages, ids=[...new Set([1,2,3,Math.ceil(n/2),n-1,n].filter(i=>i>=1&&i<=n))], map={};
+  for(const i of ids){
+    const p=await pdfDoc.getPage(i), vp=p.getViewport({scale:1}), tc=await p.getTextContent(), seen=new Set();
+    tc.items.forEach(it=>{
+      const s=it.str.trim(); if(s.length<3||!/\D/.test(s)) return;
+      const [a,b,,,e,f]=it.transform, k=s+'|'+Math.round(e/12)+'|'+Math.round(f/12); if(seen.has(k)) return; seen.add(k);
+      const m=map[k]||(map[k]={s,a,b,e,f,w:it.width,h:it.height||12,vp,c:0}); m.c++;
+    });
+  }
+  const hits=Object.values(map).filter(m=>m.c>=Math.max(2,Math.ceil(ids.length*.7)));
+  if(!hits.length){ $('detInfo').textContent='No repeated text found. The watermark is probably an image baked into the slide. Use the manual tools, or send the PDF for a closer look.'; return; }
+  let tilted=false;
+  hits.forEach(m=>{
+    const len=Math.hypot(m.a,m.b)||1, ux=m.a/len, uy=m.b/len, pts=[[0,0],[m.w,0],[0,m.h],[m.w,m.h]].map(([u,v])=>[m.e+u*ux-v*uy,m.f+u*uy+v*ux]);
+    const xs=pts.map(q=>q[0]), ys=pts.map(q=>q[1]), W=m.vp.width, H=m.vp.height, pad=3;
+    if(Math.abs(m.b)>.02) tilted=true;
+    regions.push({x:clamp((Math.min(...xs)-pad)/W,0,1),y:clamp((H-Math.max(...ys)-pad)/H,0,1),w:(Math.max(...xs)-Math.min(...xs)+2*pad)/W,h:(Math.max(...ys)-Math.min(...ys)+2*pad)/H});
+  });
+  $('detInfo').textContent=`Found ${hits.length} repeated text item${hits.length>1?'s':''}: ${hits.slice(0,3).map(m=>'“'+m.s.slice(0,30)+'”').join(', ')}.`+(tilted?' It is tilted, so the covered box is large and may hide nearby content. Check the preview.':' Added to the covered areas.');
+  refreshPreview();
 }
 
 async function handleFile(f){
   if(!f||f.type!=='application/pdf'){ $('fileInfo').textContent='Please choose a PDF file.'; return; }
   $('fileInfo').textContent='Reading…';
   try{ pdfDoc=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise; }
-  catch(e){ $('fileInfo').textContent='Could not open this PDF (it may be password protected).'; return; }
+  catch(e){ $('fileInfo').textContent=e&&e.name==='PasswordException'?'This PDF is password protected. Remove the password and try again.':'Could not open this PDF.'; return; }
   fileName=f.name.replace(/\.pdf$/i,'');
-  $('fileInfo').textContent=`${f.name} · ${pdfDoc.numPages} pages`;
+  $('fileInfo').textContent=`${f.name} · ${pdfDoc.numPages} pages`; regions=[]; $('detInfo').textContent='';
   $('pageCount').textContent=`of ${pdfDoc.numPages}`;
   $('prevPage').disabled=false; $('prevPage').max=pdfDoc.numPages; $('prevPage').value=1;
-  $('go').disabled=false; await loadPreview();
+  $('go').disabled=false; document.querySelector('[data-tab=col]').click(); await loadPreview(); buildThumbs();
 }
 
 /* ---------- Export ---------- */
@@ -411,7 +487,7 @@ $('clear').onclick = () => { regions=[]; refreshPreview(); };
 $('draw').onclick = () => { drawMode=!drawMode; $('draw').classList.toggle('on',drawMode); $('preview').style.cursor=drawMode?'crosshair':''; $('preview').style.touchAction=drawMode?'none':''; };
 const frac = e => { const b=$('preview').getBoundingClientRect(); return [clamp((e.clientX-b.left)/b.width,0,1),clamp((e.clientY-b.top)/b.height,0,1)]; };
 let anchor=null;
-$('preview').addEventListener('pointerdown', e => { if(!drawMode) return; anchor=frac(e); $('preview').setPointerCapture(e.pointerId); });
+$('preview').addEventListener('pointerdown', e => { if(!drawMode||view!=='slide') return; anchor=frac(e); $('preview').setPointerCapture(e.pointerId); });
 $('preview').addEventListener('pointermove', e => {
   if(!anchor) return; const p=frac(e);
   live={x:Math.min(anchor[0],p[0]),y:Math.min(anchor[1],p[1]),w:Math.abs(p[0]-anchor[0]),h:Math.abs(p[1]-anchor[1])}; refreshPreview();
@@ -425,9 +501,15 @@ $('file').onchange=e=>handleFile(e.target.files[0]);
 ['dragenter','dragover'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.add('on');}));
 ['dragleave','drop'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.remove('on');}));
 $('drop').addEventListener('drop',e=>handleFile(e.dataTransfer.files[0]));
-document.querySelectorAll('.card input:not(#file):not(#prevPage), .card select').forEach(el => el.addEventListener('input', refreshPreview));
+document.querySelectorAll('.pane input:not(#file):not(#prevPage), .pane select').forEach(el => el.addEventListener('input', refreshPreview));
 $('prevPage').addEventListener('change',loadPreview);
 $('go').onclick=exportPdf;
+$('detect').onclick=detectWm;
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t===b));document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.tab));});
+const step=d=>{ if(!pdfDoc) return; $('prevPage').value=clamp(previewIdx+d,1,pdfDoc.numPages); loadPreview(); };
+$('prev').onclick=()=>step(-1); $('next').onclick=()=>step(1);
+[['vSlide','slide'],['vSheet','sheet']].forEach(([id,v])=>$(id).onclick=()=>{view=v;$('vSlide').classList.toggle('on',v==='slide');$('vSheet').classList.toggle('on',v==='sheet');refreshPreview();});
+$('per').addEventListener('change',()=>{ if(+$('per').value&&view==='slide') $('vSheet').click(); });
 </script>
 </body>
 </html>
