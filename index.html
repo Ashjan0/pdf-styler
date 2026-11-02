@@ -3,117 +3,145 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ashraf PDF Styler</title>
-<meta name="description" content="Change slide background and add page numbers to any PDF, right in your browser. Built by Ashraf.">
+<title>PDF Styler</title>
+<meta name="description" content="Recolour slides, add page numbers and text, remove watermarks and print several slides per A4 page. Runs entirely in your browser.">
 <style>
-  :root{
-    --bg:#0b0f1a; --panel:#131a2b; --line:#232d45; --text:#e8ecf6; --muted:#8e9ab5;
-    --accent:#ff9f1c; --accent2:#2dd4ff;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-  header{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
-  .brand{font-weight:800;font-size:1.25rem;letter-spacing:.3px}
-  .brand span{color:var(--accent)}
-  header a{color:var(--muted);text-decoration:none;font-size:.9rem}
-  header a:hover{color:var(--text)}
-  main{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
-  h1{font-size:1.9rem;margin:0 0 6px}
-  .sub{color:var(--muted);margin:0 0 26px}
-  .grid{display:grid;grid-template-columns:380px 1fr;gap:22px}
-  @media(max-width:900px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
-  .card h2{font-size:.8rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent2);margin:0 0 12px}
-  .card + .card{margin-top:16px}
-  label{display:block;font-size:.88rem;color:var(--muted);margin:10px 0 4px}
-  input[type=number],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#0e1424;color:var(--text);font-size:.95rem}
-  input[type=color]{width:46px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;padding:2px;cursor:pointer}
-  input[type=range]{width:100%}
-  .row{display:flex;gap:10px;align-items:center}
-  .check{display:flex;align-items:center;gap:8px;color:var(--text);font-size:.95rem;margin:6px 0;cursor:pointer}
-  .drop{border:2px dashed var(--line);border-radius:12px;padding:26px 14px;text-align:center;cursor:pointer;color:var(--muted);transition:.15s}
-  .drop:hover,.drop.on{border-color:var(--accent);color:var(--text)}
-  .drop b{color:var(--text)}
-  .swatches{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
-  .sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
-  .sw:hover{border-color:var(--text)}
-  button.go{width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;font-size:1rem;font-weight:700;background:var(--accent);color:#1a1200;cursor:pointer}
-  button.go:disabled{opacity:.45;cursor:not-allowed}
-  .bar{height:8px;background:#0e1424;border-radius:99px;overflow:hidden;margin-top:12px;display:none}
-  .bar i{display:block;height:100%;width:0;background:var(--accent2);transition:width .15s}
-  .status{font-size:.85rem;color:var(--muted);margin-top:8px;min-height:1.2em}
-  .preview{background:#05080f;border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:320px;overflow:hidden}
-  canvas#preview{max-width:100%;height:auto;display:block}
-  .empty{color:var(--muted);padding:40px;text-align:center}
-  .note{font-size:.8rem;color:var(--muted);margin-top:10px}
-  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
-  footer a{color:var(--accent)}
+:root{--bg:#0b0f1a;--panel:#131a2b;--text:#e8ecf6;--accent:#ff9f1c;--on:#1a1200;
+--line:color-mix(in srgb,var(--text) 16%,var(--panel));--muted:color-mix(in srgb,var(--text) 58%,var(--bg));
+--field:color-mix(in srgb,var(--bg) 60%,var(--panel));--accent2:color-mix(in srgb,var(--accent) 50%,var(--text))}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+header{padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.brand{font-weight:800;font-size:1.2rem}.brand span{color:var(--accent)}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
+.tools a{color:var(--muted);text-decoration:none}.tools a:hover{color:var(--text)}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:1.8rem;margin:0 0 6px}.sub{color:var(--muted);margin:0 0 24px}
+.grid{display:grid;grid-template-columns:400px 1fr;gap:22px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{font-size:1rem;margin:0 0 10px;color:var(--accent2)}
+.card+.card{margin-top:16px}
+label{display:block;font-size:.86rem;color:var(--muted);margin:10px 0 4px}
+input[type=number],input[type=text],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--text);font-size:.93rem}
+input[type=color]{width:44px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;padding:2px;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:flex-end}.row>div{flex:1}.row>.fit{flex:none}
+.check{display:flex;align-items:center;gap:8px;color:var(--text);font-size:.93rem;margin:6px 0;cursor:pointer}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:24px 14px;text-align:center;cursor:pointer;color:var(--muted)}
+.drop:hover,.drop.on{border-color:var(--accent);color:var(--text)}.drop b{color:var(--text)}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}.sw:hover{border-color:var(--text)}
+button{font:inherit;cursor:pointer}
+.mini{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--text);font-size:.83rem}
+.mini:hover,.mini.on{border-color:var(--accent);color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+button.go{width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;font-weight:700;background:var(--accent);color:var(--on)}
+button.go:disabled{opacity:.45;cursor:not-allowed}
+.bar{height:8px;background:var(--field);border-radius:99px;overflow:hidden;margin-top:12px;display:none}
+.bar i{display:block;height:100%;width:0;background:var(--accent2)}
+.status{font-size:.85rem;color:var(--muted);margin-top:8px;min-height:1.2em}
+.note{font-size:.8rem;color:var(--muted);margin-top:8px}
+.preview{background:var(--field);border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:320px;overflow:hidden}
+canvas#preview{max-width:100%;height:auto;display:block}.empty{color:var(--muted);padding:40px;text-align:center}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">Ashraf<span>.</span>dev</div>
-  <a href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener">GitHub ↗</a>
+  <div class="brand">PDF<span>.</span>Styler</div>
+  <div class="tools">
+    <label for="theme" style="margin:0">Theme</label>
+    <select id="theme" style="width:auto"></select>
+    <span id="custom" hidden>
+      <input type="color" id="tBg" title="Page background" aria-label="Page background">
+      <input type="color" id="tPanel" title="Panels" aria-label="Panel colour">
+      <input type="color" id="tText" title="Text" aria-label="Text colour">
+      <input type="color" id="tAccent" title="Accent" aria-label="Accent colour">
+    </span>
+    <a id="gh" href="#" target="_blank" rel="noopener" hidden>GitHub ↗</a>
+  </div>
 </header>
 
 <main>
   <h1>PDF Styler</h1>
-  <p class="sub">Change the slide background and add page numbers to any PDF — 100% in your browser. Your file never leaves your device.</p>
-
+  <p class="sub">Recolour slides, add page numbers and text, remove a watermark, and print several slides on one A4 page. Everything runs in your browser; your file is never uploaded.</p>
   <div class="grid">
     <div>
       <div class="card">
         <h2>1 · Upload PDF</h2>
-        <div class="drop" id="drop"><b>Click to choose</b> or drag &amp; drop a PDF here</div>
+        <div class="drop" id="drop" tabindex="0"><b>Click to choose</b> or drag &amp; drop a PDF here</div>
         <input type="file" id="file" accept="application/pdf" hidden>
         <div class="status" id="fileInfo"></div>
       </div>
 
       <div class="card">
-        <h2>2 · Background</h2>
+        <h2>2 · Colours</h2>
         <label class="check"><input type="checkbox" id="changeBg" checked> Change background colour</label>
         <div class="swatches" id="swatches"></div>
-        <div class="row"><input type="color" id="bgColor" value="#2a1b4d"><span class="note" style="margin:0">Custom colour</span></div>
-        <div class="note">Tip: slides have white text, so dark / deep colours look best.</div>
+        <div class="row"><div class="fit"><input type="color" id="bgColor" value="#2a1b4d" aria-label="Background colour"></div><div class="note" style="margin:0">Custom background</div></div>
+        <label class="check"><input type="checkbox" id="textOn"> Change slide text colour</label>
+        <div class="row"><div class="fit"><input type="color" id="textColor" value="#ffffff" aria-label="Slide text colour"></div><div class="note" style="margin:0">Use dark text on a light background. Photos may shift slightly.</div></div>
       </div>
 
       <div class="card">
-        <h2>3 · Page numbers</h2>
+        <h2>3 · Remove watermark</h2>
+        <div class="note" style="margin:0 0 6px">Covers an area by blending the surrounding background into it. Works best on plain backgrounds. Use it on your own slides.</div>
+        <div class="btns">
+          <button class="mini" data-r="br">Bottom right</button><button class="mini" data-r="bl">Bottom left</button>
+          <button class="mini" data-r="tr">Top right</button><button class="mini" data-r="tl">Top left</button>
+          <button class="mini" id="draw">Draw on preview</button><button class="mini" id="undo">Undo</button><button class="mini" id="clear">Clear all</button>
+        </div>
+        <div class="status" id="regInfo">No area selected.</div>
+      </div>
+
+      <div class="card">
+        <h2>4 · Text &amp; page numbers</h2>
+        <label>Font</label>
+        <select id="font"><option>Arial</option><option>Segoe UI</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option><option>Courier New</option><option>Trebuchet MS</option></select>
         <label class="check"><input type="checkbox" id="numOn" checked> Show slide numbers</label>
         <div class="row">
-          <div style="flex:1"><label>Position</label>
-            <select id="pos">
-              <option value="br">Bottom right</option>
-              <option value="bc">Bottom center</option>
-              <option value="bl">Bottom left</option>
-              <option value="tr">Top right</option>
-              <option value="tc">Top center</option>
-              <option value="tl">Top left</option>
-            </select></div>
-          <div style="flex:1"><label>Format</label>
-            <select id="fmt">
-              <option value="n">3</option>
-              <option value="nt">3 / 23</option>
-              <option value="p">Page 3</option>
-              <option value="s">Slide 3</option>
-            </select></div>
+          <div><label>Position</label><select id="pos"><option value="br">Bottom right</option><option value="bc">Bottom center</option><option value="bl">Bottom left</option><option value="tr">Top right</option><option value="tc">Top center</option><option value="tl">Top left</option></select></div>
+          <div><label>Format</label><select id="fmt"><option value="n">3</option><option value="nt">3 / 23</option><option value="p">Page 3</option><option value="s">Slide 3</option></select></div>
         </div>
         <div class="row">
-          <div style="flex:1"><label>Start from</label><input type="number" id="start" value="1" min="0"></div>
-          <div><label>Colour</label><input type="color" id="numColor" value="#ff9f1c"></div>
+          <div><label>Start from</label><input type="number" id="start" value="1" min="0"></div>
+          <div><label>Size (pt)</label><input type="number" id="size" value="18" min="6" max="72"></div>
+          <div class="fit"><label>Colour</label><input type="color" id="numColor" value="#ff9f1c"></div>
         </div>
-        <label>Size</label><input type="range" id="size" min="2" max="7" step="0.2" value="3.4">
         <label class="check"><input type="checkbox" id="skipFirst"> Hide number on first slide</label>
+        <label class="check" style="margin-top:14px"><input type="checkbox" id="txtOn"> Add text on every slide (name, roll no., college)</label>
+        <input type="text" id="txt" placeholder="e.g. Ashraf · BCA 3rd year" maxlength="80">
+        <div class="row">
+          <div><label>Position</label><select id="txtPos"><option value="bl">Bottom left</option><option value="bc">Bottom center</option><option value="br">Bottom right</option><option value="tl">Top left</option><option value="tc">Top center</option><option value="tr">Top right</option></select></div>
+          <div><label>Size (pt)</label><input type="number" id="txtSize" value="14" min="6" max="72"></div>
+          <div class="fit"><label>Colour</label><input type="color" id="txtColor" value="#ffffff"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="txtBold"> Bold</label>
       </div>
 
       <div class="card">
-        <h2>4 · Export</h2>
-        <label>Quality</label>
-        <select id="quality">
-          <option value="1.5">Standard (smaller file)</option>
-          <option value="2" selected>High</option>
-          <option value="3">Max (big file)</option>
+        <h2>5 · Page layout</h2>
+        <label>Slides per page</label>
+        <select id="per">
+          <option value="0">Original size (1 slide per page)</option>
+          <option value="1">A4 · 1 slide</option><option value="2">A4 · 2 slides</option><option value="3">A4 · 3 slides</option>
+          <option value="4">A4 · 4 slides</option><option value="6">A4 · 6 slides</option><option value="9">A4 · 9 slides</option>
         </select>
+        <div class="row">
+          <div><label>Orientation</label><select id="orient"><option value="a">Auto (best fit)</option><option value="p">Portrait</option><option value="l">Landscape</option></select></div>
+          <div><label>Gap (pt)</label><input type="number" id="gap" value="10" min="0" max="60"></div>
+        </div>
+        <label>Paper colour</label>
+        <select id="sheet"><option value="w">White (good for printing)</option><option value="bg">Same as slide background</option></select>
+        <label class="check"><input type="checkbox" id="border" checked> Thin border around each slide</label>
+        <div class="status" id="layoutInfo"></div>
+      </div>
+
+      <div class="card">
+        <h2>6 · Export</h2>
+        <label>Quality</label>
+        <select id="quality"><option value="1.5">Standard (smaller file)</option><option value="2" selected>High</option><option value="3">Max (big file)</option></select>
         <button class="go" id="go" disabled>Download styled PDF</button>
         <div class="bar" id="bar"><i id="barFill"></i></div>
         <div class="status" id="status"></div>
@@ -121,9 +149,9 @@
       </div>
     </div>
 
-    <div class="card" style="align-self:start">
+    <div class="card" style="align-self:start;position:sticky;top:12px">
       <h2>Live preview</h2>
-      <div class="row" style="margin-bottom:10px">
+      <div class="row" style="margin-bottom:10px;align-items:center">
         <label style="margin:0">Slide</label>
         <input type="number" id="prevPage" value="1" min="1" style="width:90px" disabled>
         <span class="note" id="pageCount" style="margin:0"></span>
@@ -135,156 +163,271 @@
     </div>
   </div>
 </main>
-
-<footer>Built by <a href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener">Ashraf</a> · runs fully client-side</footer>
+<footer>Built by Ashraf · runs fully client-side</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+const GITHUB = ''; // put your GitHub profile URL here to show the link
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
 const $ = id => document.getElementById(id);
-let pdfDoc = null, fileName = 'slides', previewRaw = null, previewIdx = 1, busy = false;
+const clamp = (v,a,b) => Math.min(b, Math.max(a,v));
+const hex2rgb = h => [1,3,5].map(i => parseInt(h.slice(i,i+2),16));
+let pdfDoc=null, fileName='slides', previewRaw=null, previewPt=[960,540], previewIdx=1, busy=false;
+let regions=[], live=null, drawMode=false;
 
-const PRESETS = [
-  ['#0b0f1a','Midnight'],['#000000','Black'],['#1f2430','Charcoal'],['#2a1b4d','Deep purple'],
-  ['#0f3d2e','Forest'],['#4a1220','Maroon'],['#0a2d42','Original navy']
-];
-PRESETS.forEach(([c,t]) => {
-  const d = document.createElement('div');
-  d.className = 'sw'; d.style.background = c; d.title = t;
-  d.onclick = () => { $('bgColor').value = c; $('changeBg').checked = true; refreshPreview(); };
+/* ---------- Site themes ---------- */
+const THEMES = {
+  'Dark':['#0b0f1a','#131a2b','#e8ecf6','#ff9f1c'], 'Light':['#f4f6fb','#ffffff','#1b2236','#3b5bdb'],
+  'Ocean':['#06222e','#0c3446','#e3f4fa','#2dd4ff'], 'Forest':['#0c1f17','#14301f','#e6f4ea','#7bd88f'],
+  'Rose':['#fff5f7','#ffffff','#3b1b25','#d6336c'], 'Custom':null
+};
+const tIds = ['tBg','tPanel','tText','tAccent'];
+function applyTheme(c){
+  const s = document.documentElement.style;
+  ['--bg','--panel','--text','--accent'].forEach((k,i) => s.setProperty(k, c[i]));
+  const [r,g,b] = hex2rgb(c[3]);
+  s.setProperty('--on', (r*.299+g*.587+b*.114) > 150 ? '#111' : '#fff');
+}
+Object.keys(THEMES).forEach(k => $('theme').add(new Option(k, k)));
+function setTheme(name, custom){
+  let c = THEMES[name] || custom || THEMES.Dark;
+  $('theme').value = name; $('custom').hidden = name !== 'Custom';
+  tIds.forEach((id,i) => $(id).value = c[i]);
+  applyTheme(c);
+  try{ localStorage.setItem('pdfstyler-theme', JSON.stringify({name, c})); }catch(e){}
+}
+$('theme').onchange = () => setTheme($('theme').value, tIds.map(id => $(id).value));
+tIds.forEach(id => $(id).oninput = () => setTheme('Custom', tIds.map(i => $(i).value)));
+try{ const t = JSON.parse(localStorage.getItem('pdfstyler-theme')); setTheme(t.name, t.c); }catch(e){ setTheme('Dark'); }
+if(GITHUB){ $('gh').href = GITHUB; $('gh').hidden = false; }
+
+/* ---------- Background swatches ---------- */
+[['#0b0f1a','Midnight'],['#000000','Black'],['#1f2430','Charcoal'],['#2a1b4d','Deep purple'],['#0f3d2e','Forest'],
+ ['#4a1220','Maroon'],['#0a2d42','Navy'],['#ffffff','White'],['#f5efe0','Cream']].forEach(([c,t]) => {
+  const d = document.createElement('div'); d.className='sw'; d.style.background=c; d.title=t;
+  d.onclick = () => { $('bgColor').value=c; $('changeBg').checked=true; refreshPreview(); };
   $('swatches').appendChild(d);
 });
 
-const hex2rgb = h => [1,3,5].map(i => parseInt(h.slice(i,i+2),16));
-
 function opts(){
   return {
-    changeBg: $('changeBg').checked, bg: hex2rgb($('bgColor').value),
-    numOn: $('numOn').checked, pos: $('pos').value, fmt: $('fmt').value,
-    size: +$('size').value, numColor: $('numColor').value,
-    start: parseInt($('start').value,10) || 0, skipFirst: $('skipFirst').checked
+    changeBg:$('changeBg').checked, bg:hex2rgb($('bgColor').value),
+    textOn:$('textOn').checked, textColor:hex2rgb($('textColor').value),
+    font:$('font').value,
+    numOn:$('numOn').checked, pos:$('pos').value, fmt:$('fmt').value, size:+$('size').value||18, numColor:$('numColor').value,
+    start:parseInt($('start').value,10)||0, skipFirst:$('skipFirst').checked,
+    txtOn:$('txtOn').checked && $('txt').value.trim(), txt:$('txt').value.trim(), txtPos:$('txtPos').value,
+    txtSize:+$('txtSize').value||14, txtColor:$('txtColor').value, txtBold:$('txtBold').checked,
+    per:+$('per').value, orient:$('orient').value, gap:+$('gap').value||0, sheet:$('sheet').value, border:$('border').checked
   };
 }
 
-// Replace the slide background colour (sampled from the top-left pixel) while keeping text, images and tables.
-function recolor(ctx, w, h, newBg){
-  const img = ctx.getImageData(0,0,w,h), d = img.data;
-  const sr = d[0], sg = d[1], sb = d[2];
-  const dr = newBg[0]-sr, dg = newBg[1]-sg, db = newBg[2]-sb;
-  for(let i=0;i<d.length;i+=4){
-    const r=d[i]-sr, g=d[i+1]-sg, b=d[i+2]-sb;
-    const dist = Math.sqrt(r*r+g*g+b*b);
-    const wgt = Math.max(0, 1 - dist/260);
-    if(wgt === 0) continue;
-    d[i]   = Math.min(255, Math.max(0, d[i]   + dr*wgt));
-    d[i+1] = Math.min(255, Math.max(0, d[i+1] + dg*wgt));
-    d[i+2] = Math.min(255, Math.max(0, d[i+2] + db*wgt));
+/* ---------- Pixel work ---------- */
+// Fill a rectangle (fractions of the slide) by blending in the colours just outside its edges.
+function cover(ctx,W,H,R){
+  const x0=Math.max(0,Math.floor(R.x*W)), y0=Math.max(0,Math.floor(R.y*H));
+  const x1=Math.min(W,Math.ceil((R.x+R.w)*W)), y1=Math.min(H,Math.ceil((R.y+R.h)*H));
+  if(x1<=x0||y1<=y0) return;
+  const img=ctx.getImageData(0,0,W,H), d=img.data, o=3;
+  const L=x0>=o+1, Rt=x1+o<W, T=y0>=o+1, B=y1+o<H;
+  if(!(L||Rt||T||B)) return;
+  const at=(x,y)=>(y*W+x)*4;
+  for(let y=y0;y<y1;y++) for(let x=x0;x<x1;x++){
+    let r=0,g=0,b=0,s=0;
+    const add=(px,py,dist)=>{const i=at(px,py),w=1/(dist*dist);r+=d[i]*w;g+=d[i+1]*w;b+=d[i+2]*w;s+=w;};
+    if(L) add(x0-o,y,x-x0+1); if(Rt) add(x1+o-1,y,x1-x);
+    if(T) add(x,y0-o,y-y0+1); if(B) add(x,y1+o-1,y1-y);
+    const i=at(x,y); d[i]=r/s; d[i+1]=g/s; d[i+2]=b/s;
   }
   ctx.putImageData(img,0,0);
 }
 
-function drawNumber(ctx, w, h, idx, total, o){
-  if(o.skipFirst && idx === 1) return;
-  const n = idx + o.start - 1, t = total + o.start - 1;
-  const label = { n:`${n}`, nt:`${n} / ${t}`, p:`Page ${n}`, s:`Slide ${n}` }[o.fmt];
-  const fs = h * o.size / 100, m = w * 0.025;
-  ctx.font = `700 ${fs}px system-ui, -apple-system, "Segoe UI", Arial, sans-serif`;
-  ctx.fillStyle = o.numColor;
-  ctx.textAlign = o.pos[1]==='l' ? 'left' : o.pos[1]==='c' ? 'center' : 'right';
-  ctx.textBaseline = o.pos[0]==='b' ? 'bottom' : 'top';
-  const x = o.pos[1]==='l' ? m : o.pos[1]==='c' ? w/2 : w-m;
-  const y = o.pos[0]==='b' ? h-m : m;
-  ctx.fillText(label, x, y);
+// One pass: move the background to the new colour and (optionally) map text pixels to a new text colour.
+function restyle(ctx,W,H,bg0,newBg,textNew){
+  const img=ctx.getImageData(0,0,W,H), d=img.data;
+  const t0=(bg0[0]*.299+bg0[1]*.587+bg0[2]*.114)<128?[255,255,255]:[0,0,0];
+  const ax=t0[0]-bg0[0], ay=t0[1]-bg0[1], az=t0[2]-bg0[2], L2=ax*ax+ay*ay+az*az||1;
+  const dr=newBg[0]-bg0[0], dg=newBg[1]-bg0[1], db=newBg[2]-bg0[2];
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i]-bg0[0], g=d[i+1]-bg0[1], b=d[i+2]-bg0[2];
+    if(textNew){
+      const t=(r*ax+g*ay+b*az)/L2;
+      if(t>-.05 && t<1.05){
+        const er=r-t*ax, eg=g-t*ay, eb=b-t*az;
+        if(er*er+eg*eg+eb*eb<1600){
+          const k=clamp(t,0,1);
+          d[i]=newBg[0]+(textNew[0]-newBg[0])*k; d[i+1]=newBg[1]+(textNew[1]-newBg[1])*k; d[i+2]=newBg[2]+(textNew[2]-newBg[2])*k;
+          continue;
+        }
+      }
+    }
+    const w=Math.max(0,1-Math.sqrt(r*r+g*g+b*b)/260);
+    if(w){ d[i]=clamp(d[i]+dr*w,0,255); d[i+1]=clamp(d[i+1]+dg*w,0,255); d[i+2]=clamp(d[i+2]+db*w,0,255); }
+  }
+  ctx.putImageData(img,0,0);
 }
 
-function style(canvas, idx, total){
-  const o = opts(), ctx = canvas.getContext('2d');
-  if(o.changeBg) recolor(ctx, canvas.width, canvas.height, o.bg);
-  if(o.numOn) drawNumber(ctx, canvas.width, canvas.height, idx, total, o);
+function label(ctx,W,H,text,pos,fs,color,font,bold){
+  const m=W*.025;
+  ctx.font=`${bold?700:600} ${fs}px "${font}", system-ui, sans-serif`;
+  ctx.fillStyle=color;
+  ctx.textAlign=pos[1]==='l'?'left':pos[1]==='c'?'center':'right';
+  ctx.textBaseline=pos[0]==='b'?'bottom':'top';
+  ctx.fillText(text, pos[1]==='l'?m:pos[1]==='c'?W/2:W-m, pos[0]==='b'?H-m:m);
 }
 
-async function renderRaw(n, scale){
-  const page = await pdfDoc.getPage(n);
-  const vp = page.getViewport({scale});
-  const c = document.createElement('canvas');
-  c.width = Math.round(vp.width); c.height = Math.round(vp.height);
-  await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise;
-  const pt = page.getViewport({scale:1});
-  return {c, wpt: pt.width, hpt: pt.height};
+// sc = canvas pixels per PDF point, so font sizes in pt stay correct at any quality.
+function style(canvas,idx,total,wpt,withGuides){
+  const o=opts(), ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height, sc=W/wpt;
+  const bg0=Array.from(ctx.getImageData(0,0,1,1).data).slice(0,3);
+  regions.forEach(r => cover(ctx,W,H,r));
+  if(o.changeBg||o.textOn) restyle(ctx,W,H,bg0,o.changeBg?o.bg:bg0,o.textOn?o.textColor:null);
+  if(o.txtOn) label(ctx,W,H,o.txt,o.txtPos,o.txtSize*sc,o.txtColor,o.font,o.txtBold);
+  if(o.numOn && !(o.skipFirst&&idx===1)){
+    const n=idx+o.start-1, t=total+o.start-1;
+    label(ctx,W,H,{n:`${n}`,nt:`${n} / ${t}`,p:`Page ${n}`,s:`Slide ${n}`}[o.fmt],o.pos,o.size*sc,o.numColor,o.font,true);
+  }
+  if(withGuides){
+    ctx.save(); ctx.strokeStyle='#ff3b3b'; ctx.lineWidth=Math.max(1,W/500); ctx.setLineDash([6,4]);
+    regions.concat(live?[live]:[]).forEach(r => ctx.strokeRect(r.x*W,r.y*H,r.w*W,r.h*H));
+    ctx.restore();
+  }
 }
 
+/* ---------- Page layout ---------- */
+const A4=[595.28,841.89], MARGIN=20, GRIDS={1:[1,1],2:[1,2],3:[1,3],4:[2,2],6:[2,3],9:[3,3]};
+function layoutFor(w,h,o){
+  if(!o.per) return null;
+  const [c0,r0]=GRIDS[o.per]; let best=null;
+  for(const land of (o.orient==='a'?[0,1]:[o.orient==='l'?1:0])){
+    const pw=land?A4[1]:A4[0], ph=land?A4[0]:A4[1], cols=land?r0:c0, rows=land?c0:r0;
+    const cw=(pw-2*MARGIN-(cols-1)*o.gap)/cols, ch=(ph-2*MARGIN-(rows-1)*o.gap)/rows, f=Math.min(cw/w,ch/h);
+    if(!best||f>best.f) best={pw,ph,cols,rows,cw,ch,f,land};
+  }
+  return best;
+}
+function updateInfo(){
+  if(!pdfDoc){ $('layoutInfo').textContent=''; return; }
+  const o=opts(), L=layoutFor(previewPt[0],previewPt[1],o), n=pdfDoc.numPages;
+  $('layoutInfo').textContent = L
+    ? `${n} slides → ${Math.ceil(n/o.per)} A4 page${Math.ceil(n/o.per)>1?'s':''} (${L.cols}×${L.rows}, ${L.land?'landscape':'portrait'})`
+    : `${n} slides → ${n} pages at original size`;
+}
+
+/* ---------- Rendering ---------- */
+async function renderRaw(n,ppp,cell){
+  const page=await pdfDoc.getPage(n), pt=page.getViewport({scale:1});
+  const scale=cell?ppp*Math.min(cell.w/pt.width,cell.h/pt.height):ppp;
+  const vp=page.getViewport({scale}), c=document.createElement('canvas');
+  c.width=Math.round(vp.width); c.height=Math.round(vp.height);
+  await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+  return {c,wpt:pt.width,hpt:pt.height};
+}
 async function loadPreview(){
   if(!pdfDoc) return;
-  const n = Math.min(Math.max(1, parseInt($('prevPage').value,10)||1), pdfDoc.numPages);
-  previewIdx = n;
-  previewRaw = (await renderRaw(n, 1)).c;
-  refreshPreview();
+  previewIdx=clamp(parseInt($('prevPage').value,10)||1,1,pdfDoc.numPages);
+  const r=await renderRaw(previewIdx,1,null);
+  previewRaw=r.c; previewPt=[r.wpt,r.hpt]; refreshPreview();
 }
-
 function refreshPreview(){
+  updateInfo();
+  $('regInfo').textContent = regions.length ? `${regions.length} area${regions.length>1?'s':''} will be covered.` : 'No area selected.';
   if(!previewRaw) return;
-  const p = $('preview');
-  p.width = previewRaw.width; p.height = previewRaw.height;
+  const p=$('preview'); p.width=previewRaw.width; p.height=previewRaw.height;
   p.getContext('2d').drawImage(previewRaw,0,0);
-  style(p, previewIdx, pdfDoc.numPages);
-  p.style.display = 'block'; $('empty').style.display = 'none';
+  style(p,previewIdx,pdfDoc.numPages,previewPt[0],true);
+  p.style.display='block'; $('empty').style.display='none';
 }
 
 async function handleFile(f){
-  if(!f || f.type !== 'application/pdf'){ $('fileInfo').textContent = 'Please choose a PDF file.'; return; }
-  $('fileInfo').textContent = 'Reading…';
-  try{
-    pdfDoc = await pdfjsLib.getDocument({data: await f.arrayBuffer()}).promise;
-  }catch(e){ $('fileInfo').textContent = 'Could not open this PDF.'; return; }
-  fileName = f.name.replace(/\.pdf$/i,'');
-  $('fileInfo').textContent = `${f.name} · ${pdfDoc.numPages} pages`;
-  $('pageCount').textContent = `of ${pdfDoc.numPages}`;
-  $('prevPage').disabled = false; $('prevPage').max = pdfDoc.numPages; $('prevPage').value = 1;
-  $('go').disabled = false;
-  await loadPreview();
+  if(!f||f.type!=='application/pdf'){ $('fileInfo').textContent='Please choose a PDF file.'; return; }
+  $('fileInfo').textContent='Reading…';
+  try{ pdfDoc=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise; }
+  catch(e){ $('fileInfo').textContent='Could not open this PDF (it may be password protected).'; return; }
+  fileName=f.name.replace(/\.pdf$/i,'');
+  $('fileInfo').textContent=`${f.name} · ${pdfDoc.numPages} pages`;
+  $('pageCount').textContent=`of ${pdfDoc.numPages}`;
+  $('prevPage').disabled=false; $('prevPage').max=pdfDoc.numPages; $('prevPage').value=1;
+  $('go').disabled=false; await loadPreview();
 }
 
+/* ---------- Export ---------- */
 async function exportPdf(){
-  if(!pdfDoc || busy) return;
-  busy = true; $('go').disabled = true;
-  const total = pdfDoc.numPages, scale = +$('quality').value;
-  $('bar').style.display = 'block'; $('barFill').style.width = '0';
-  let doc = null;
+  if(!pdfDoc||busy) return;
+  busy=true; $('go').disabled=true;
+  const o=opts(), total=pdfDoc.numPages, Q=+$('quality').value;
+  $('bar').style.display='block'; $('barFill').style.width='0';
+  let doc=null;
+  const put=(c,pw,ph)=>{
+    const orient=pw>=ph?'l':'p';
+    if(!doc) doc=new jspdf.jsPDF({orientation:orient,unit:'pt',format:[pw,ph],compress:true}); else doc.addPage([pw,ph],orient);
+    doc.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',0,0,pw,ph); c.width=0;
+  };
   try{
-    for(let i=1;i<=total;i++){
-      $('status').textContent = `Processing slide ${i} of ${total}…`;
-      const {c, wpt, hpt} = await renderRaw(i, scale);
-      style(c, i, total);
-      const orient = wpt >= hpt ? 'l' : 'p';
-      if(!doc) doc = new jspdf.jsPDF({orientation: orient, unit:'pt', format:[wpt,hpt], compress:true});
-      else doc.addPage([wpt,hpt], orient);
-      doc.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, wpt, hpt);
-      c.width = 0;
-      $('barFill').style.width = (i/total*100) + '%';
-      await new Promise(r => setTimeout(r, 0));
+    const first=await pdfDoc.getPage(1), v=first.getViewport({scale:1}), L=layoutFor(v.width,v.height,o);
+    if(!L){
+      for(let i=1;i<=total;i++){
+        $('status').textContent=`Processing slide ${i} of ${total}…`;
+        const {c,wpt,hpt}=await renderRaw(i,Q,null);
+        style(c,i,total,wpt); put(c,wpt,hpt);
+        $('barFill').style.width=(i/total*100)+'%'; await new Promise(r=>setTimeout(r));
+      }
+    }else{
+      const ppp=Q*1.4, per=o.per, sheets=Math.ceil(total/per);
+      const paper=(o.sheet==='bg'&&o.changeBg)?`rgb(${o.bg})`:'#ffffff';
+      for(let s=0;s<sheets;s++){
+        const sc=document.createElement('canvas'); sc.width=Math.round(L.pw*ppp); sc.height=Math.round(L.ph*ppp);
+        const ctx=sc.getContext('2d'); ctx.fillStyle=paper; ctx.fillRect(0,0,sc.width,sc.height);
+        for(let k=0;k<per&&s*per+k<total;k++){
+          const i=s*per+k+1;
+          $('status').textContent=`Processing slide ${i} of ${total}…`;
+          const {c,wpt}=await renderRaw(i,ppp,{w:L.cw,h:L.ch});
+          style(c,i,total,wpt);
+          const col=k%L.cols, row=Math.floor(k/L.cols);
+          const x=(MARGIN+col*(L.cw+o.gap))*ppp+(L.cw*ppp-c.width)/2, y=(MARGIN+row*(L.ch+o.gap))*ppp+(L.ch*ppp-c.height)/2;
+          ctx.drawImage(c,x,y);
+          if(o.border){ ctx.strokeStyle='#9aa3b5'; ctx.lineWidth=Math.max(1,ppp*.5); ctx.strokeRect(x,y,c.width,c.height); }
+          c.width=0;
+          $('barFill').style.width=(i/total*100)+'%'; await new Promise(r=>setTimeout(r));
+        }
+        put(sc,L.pw,L.ph);
+      }
     }
     doc.save(`${fileName}-styled.pdf`);
-    $('status').textContent = 'Done! Your download should start now.';
+    $('status').textContent='Done! Your download should start now.';
   }catch(e){
     console.error(e);
-    $('status').textContent = 'Something went wrong. Try "Standard" quality for large files.';
+    $('status').textContent='Something went wrong. Try "Standard" quality or fewer slides per page.';
   }
-  busy = false; $('go').disabled = false;
+  busy=false; $('go').disabled=false;
 }
 
-// events
-$('drop').onclick = () => $('file').click();
-$('file').onchange = e => handleFile(e.target.files[0]);
-['dragenter','dragover'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('on'); }));
-['dragleave','drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('on'); }));
-$('drop').addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
-['changeBg','bgColor','numOn','pos','fmt','size','numColor','start','skipFirst'].forEach(id => {
-  $(id).addEventListener('input', refreshPreview);
+/* ---------- Watermark area controls ---------- */
+const PRE={br:{x:.8,y:.9,w:.2,h:.1},bl:{x:0,y:.9,w:.2,h:.1},tr:{x:.8,y:0,w:.2,h:.1},tl:{x:0,y:0,w:.2,h:.1}};
+document.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { regions.push({...PRE[b.dataset.r]}); refreshPreview(); });
+$('undo').onclick = () => { regions.pop(); refreshPreview(); };
+$('clear').onclick = () => { regions=[]; refreshPreview(); };
+$('draw').onclick = () => { drawMode=!drawMode; $('draw').classList.toggle('on',drawMode); $('preview').style.cursor=drawMode?'crosshair':''; $('preview').style.touchAction=drawMode?'none':''; };
+const frac = e => { const b=$('preview').getBoundingClientRect(); return [clamp((e.clientX-b.left)/b.width,0,1),clamp((e.clientY-b.top)/b.height,0,1)]; };
+let anchor=null;
+$('preview').addEventListener('pointerdown', e => { if(!drawMode) return; anchor=frac(e); $('preview').setPointerCapture(e.pointerId); });
+$('preview').addEventListener('pointermove', e => {
+  if(!anchor) return; const p=frac(e);
+  live={x:Math.min(anchor[0],p[0]),y:Math.min(anchor[1],p[1]),w:Math.abs(p[0]-anchor[0]),h:Math.abs(p[1]-anchor[1])}; refreshPreview();
 });
-$('prevPage').addEventListener('change', loadPreview);
-$('go').onclick = exportPdf;
+$('preview').addEventListener('pointerup', () => { if(live&&live.w>.01&&live.h>.01) regions.push(live); live=null; anchor=null; refreshPreview(); });
+
+/* ---------- Events ---------- */
+$('drop').onclick=()=>$('file').click();
+$('drop').onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); $('file').click(); } };
+$('file').onchange=e=>handleFile(e.target.files[0]);
+['dragenter','dragover'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.add('on');}));
+['dragleave','drop'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.remove('on');}));
+$('drop').addEventListener('drop',e=>handleFile(e.dataTransfer.files[0]));
+document.querySelectorAll('.card input:not(#file):not(#prevPage), .card select').forEach(el => el.addEventListener('input', refreshPreview));
+$('prevPage').addEventListener('change',loadPreview);
+$('go').onclick=exportPdf;
 </script>
 </body>
 </html>
